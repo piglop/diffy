@@ -79,7 +79,7 @@ module Diffy
 
     def split_characters(chunk)
       chunk.gsub(/^./, '').each_line.map do |line|
-        (line.chomp.split('') + ['\n']).map{|chr| ERB::Util.h(chr) }
+        (line.chomp.split + ['\n']).map{|chr| ERB::Util.h(chr) }
       end.flatten.join("\n") + "\n"
     end
 
@@ -94,11 +94,11 @@ module Diffy
           if i > 1 and enum.to_a[i+1] and l.each_line.to_a.size < 4
             highlight(l)
           else
-            l.gsub(/^./, '').gsub("\n", '').
+            l.gsub(/^./, '').sub(/\n\Z/, '').gsub("\n", ' ').
               gsub('\r', "\r").gsub('\n', "\n")
           end
         end
-      end.join('').split("\n").map do |l|
+      end.join(' ').split("\n").map do |l|
         type + l.gsub('</strong><strong>' , '')
       end
     end
